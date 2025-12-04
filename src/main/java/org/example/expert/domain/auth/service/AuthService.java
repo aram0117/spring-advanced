@@ -26,13 +26,13 @@ public class AuthService {
     @Transactional
     public SignupResponse signup(SignupRequest signupRequest) {
 
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            return new SignupResponse("이미 존재하는 이메일입니다.", 409);
+        }
+
         String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
 
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
-
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            throw new InvalidRequestException("이미 존재하는 이메일입니다.");
-        }
 
         User newUser = new User(
                 signupRequest.getEmail(),
@@ -43,7 +43,7 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
-        return new SignupResponse(bearerToken);
+        return new SignupResponse("회원가입 완료", 200, bearerToken);
     }
 
     @Transactional(readOnly = true)
