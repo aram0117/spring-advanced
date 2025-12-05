@@ -18,5 +18,6 @@ public class SignupResponse {
     public SignupResponse(String message, int status) {
         this.message = message;
         this.status = status;
+        this.bearerToken = null;
     }
 }
