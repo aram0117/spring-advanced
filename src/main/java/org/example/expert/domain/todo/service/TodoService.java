@@ -65,8 +65,8 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public TodoResponse getTodo(long todoId) {
-        Todo todo = todoRepository.findByIdWithUser(todoId)
+    public TodoResponse getTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
         User user = todo.getUser();
